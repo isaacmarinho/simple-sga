@@ -1,0 +1,43 @@
+@import '~@aws-amplify/ui-angular/theme.css'
+
+$primary-bg-color: hsl(0, 0%, 13)
+$secondary-bg-color: hsl(0, 0%, 19)
+
+[data-amplify-authenticator]
+  color: var(--amplify-colors-white)
+
+[data-amplify-authenticator] [data-amplify-router]
+  background-color: $primary-bg-color
+
+[data-amplify-authenticator] [data-state]
+  color: var(--amplify-colors-white)
+  border-top-color:  $secondary-bg-color
+
+[data-amplify-authenticator] [data-state=active]
+  border-top-color: var(--amplify-colors-white)
+
+
+[data-amplify-authenticator] [data-state=inactive]
+  background-color: $primary-bg-color
+
+
+[data-amplify-authenticator] button
+    background-color: $primary-bg-color
+    border-color: var(--amplify-colors-white)
+    color: var(--amplify-colors-white)
+[data-amplify-authenticator] h3
+    color: var(--amplify-colors-white)
+
+[data-amplify-authenticator] button:hover,
+[data-amplify-authenticator] :focus
+  background-color: $secondary-bg-color
+  color: var(--amplify-colors-white)
+  border-color: var(--amplify-colors-white)
+
+[data-amplify-authenticator] button:active
+[data-amplify-authenticator] [amplify-button]:active
+  background-color: var(--amplify-colors-white)
+  border-color: $secondary-bg-color
+  color: var(--amplify-colors-black)
+
+

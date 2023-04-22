@@ -1,0 +1,1 @@
+export const ENVIRONMENTAL_QUEUE_NAME = "environmental-queue";

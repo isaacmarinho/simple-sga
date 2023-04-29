@@ -19,8 +19,5 @@ RUN echo $(pwd)
 RUN echo $(ls -la)
 RUN npm ci
 EXPOSE 3001
-EXPOSE 3000
-EXPOSE 80
-EXPOSE 8080
 CMD ["node","index.js"]
 

@@ -8,9 +8,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 const aboutRouter = require("./routers/about");
-const coreRouter = require("./routers/core");
+const processesRouter = require("./routers/process");
 
-app.use("/about", aboutRouter);
-app.use("/core", coreRouter);
+app.use("/core/about", aboutRouter);
+app.use("/core/process", processesRouter);
 
 module.exports = app;

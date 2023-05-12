@@ -1,7 +1,7 @@
 {
   "name": "messaging",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple SGA - Messaging Module",
   "main": "src/index.js",
   "scripts": {
     "start:dev": "npx nodemon",

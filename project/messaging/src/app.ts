@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 const aboutRouter = require("./routers/about");
 const messageRouter = require("./routers/message");
 
-app.use("/about", aboutRouter);
-app.use("/message", messageRouter);
+app.use("/messaging/about", aboutRouter);
+app.use("/messaging/message", messageRouter);
 
 module.exports = app;

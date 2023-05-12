@@ -1,0 +1,157 @@
+{
+    "rabbit_version": "3.8.9",
+    "rabbitmq_version": "3.8.9",
+    "product_name": "RabbitMQ",
+    "product_version": "3.8.9",
+    "users": [
+      {
+        "name": "simple.sga",
+        "password_hash": "DQMAGhoG8K9FVI2s3Iv/DxxOO6ZGEDXDo4u9FKLeTyggzR/o",
+        "hashing_algorithm": "rabbit_password_hashing_sha256",
+        "tags": "administrator"
+      },
+      {
+        "name": "guest",
+        "password_hash": "XUqLNSrRufAGTbcKhdI68DK89S+W53U27lhHioD9IcZ5IdIl",
+        "hashing_algorithm": "rabbit_password_hashing_sha256",
+        "tags": "impersonator"
+      }
+    ],
+    "vhosts": [
+      {
+        "name": "environmental-vhost"
+      },
+      {
+        "name": "mining-vhost"
+      },
+      {
+        "name": "miscellaneous-vhost"
+      }
+    ],
+    "permissions": [
+      {
+        "user": "simple.sga",
+        "vhost": "environmental-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      },
+      {
+        "user": "simple.sga",
+        "vhost": "mining-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      },
+      {
+        "user": "simple.sga",
+        "vhost": "miscellaneous-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      },
+      {
+        "user": "guest",
+        "vhost": "environmental-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      },
+      {
+        "user": "guest",
+        "vhost": "mining-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      },
+      {
+        "user": "guest",
+        "vhost": "miscellaneous-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      }
+    ],
+    "topic_permissions": [
+  
+    ],
+    "parameters": [
+  
+    ],
+    "global_parameters": [
+      {
+        "name": "cluster_name",
+        "value": "simple-sga-cluster@a8d5c6e08439"
+      },
+      {
+        "name": "internal_cluster_id",
+        "value": "rabbitmq-cluster-id-gXeBLbsUC2W2tU0Bx_QY_w"
+      }
+    ],
+    "policies": [
+  
+    ],
+    "queues": [
+      {
+        "name": "environmental-queue",
+        "vhost": "environmental-vhost",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {
+          "x-queue-mode": "lazy",
+          "x-queue-type": "classic"
+        }
+      },
+      {
+        "name": "mining-queue",
+        "vhost": "mining-vhost",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {
+          "x-queue-mode": "lazy",
+          "x-queue-type": "classic"
+        }
+      },
+      {
+        "name": "miscellaneous-queue",
+        "vhost": "miscellaneous-vhost",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {
+          "x-queue-mode": "lazy",
+          "x-queue-type": "classic"
+        }
+      }
+    ],
+    "exchanges": [
+    ],
+    "bindings": [
+      {
+        "source": "amq.direct",
+        "vhost": "environmental-vhost",
+        "destination": "environmental-queue",
+        "destination_type": "queue",
+        "routing_key": "environmental-queue",
+        "arguments": {
+        }
+      },
+      {
+        "source": "amq.direct",
+        "vhost": "mining-vhost",
+        "destination": "mining-queue",
+        "destination_type": "queue",
+        "routing_key": "mining-queue",
+        "arguments": {
+        }
+      },
+      {
+        "source": "amq.direct",
+        "vhost": "miscellaneous-vhost",
+        "destination": "miscellaneous-queue",
+        "destination_type": "queue",
+        "routing_key": "miscellaneous-queue",
+        "arguments": {
+        }
+      }
+    ]
+  }

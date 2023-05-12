@@ -1,12 +1,21 @@
 import amqp, {Channel, Message} from "amqplib/callback_api"
 import {ENVIRONMENTAL_QUEUE_NAME} from "../consts/constants";
 import * as mailService from "./mailService";
+import dotenv from "dotenv";
 
-const CONN_URL = "amqp://guest:guest@localhost:5672/";
+dotenv.config();
+
+const RABBITMQ_SCHEMA = process.env.RABBITMQ_SCHEMA || "amqp";
+const RABBITMQ_HOST = process.env.SERVER_NAME || "localhost";
+const RABBITMQ_PORT = parseInt(process.env.RABBITMQ_PORT || "5672", 10);
+const RABBITMQ_USER = process.env.RABBITMQ_USER || "quest";
+const RABBITMQ_PASS = process.env.RABBITMQ_PASSWORD || "quest";
+
+const RABBITMQ_URL = `${RABBITMQ_SCHEMA}://${RABBITMQ_USER}:${RABBITMQ_PASS}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/`;
 
 let ch: Channel | null = null;
 
-amqp.connect(CONN_URL, (err: any, conn) => {
+amqp.connect(RABBITMQ_URL, (err: any, conn) => {
     if (!!conn && !err) {
         conn.createChannel((err: any, channel) => {
             ch = channel;
@@ -17,15 +26,16 @@ amqp.connect(CONN_URL, (err: any, conn) => {
                     console.log({Message: message});
                     message.recipients.forEach((recipient: string) => {
                         const mail = new mailService.Mail(recipient, message.body, "", message.subject);
-                        try {
-                            mailService.sendMail(mail);
-                        } catch (err) {
-                            console.log(err);
-                        }
+                        mailService.sendMail(mail).then((value) => {
+                            console.log("Message sent!");
+                            console.log("Return value: ", value);
+                        }).catch((err) => {
+                            console.error(err);
+                        });
                     });
                     ch?.ack(msg);
                 } else {
-                    console.log("No message.");
+                    console.warn("No message.");
                 }
             }, {noAck: false});
         });
@@ -37,7 +47,7 @@ amqp.connect(CONN_URL, (err: any, conn) => {
 });
 
 export const publishToQueue = async (queueName: string, data: any) => {
-    ch?.sendToQueue(queueName, Buffer.from(data,"utf-8"), {persistent: true});
+    ch?.sendToQueue(queueName, Buffer.from(data, "utf-8"), {persistent: true});
 }
 
 process.on("exit", (code) => {

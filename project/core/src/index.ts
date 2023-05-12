@@ -5,6 +5,7 @@ const app = require("./app");
 const axios = require('axios')
 
 const port = process.env.PORT || 3015;
+const messaging_endpoint: string = process.env.MESSAGING_ENDPOINT || "http://localhost:3010/messaging";
 
 let processing: boolean = false;
 
@@ -19,7 +20,7 @@ const postMessage = function (queue: String, email: String[], subject: String, m
         }
     };
 
-    axios.post("http://localhost:3010/message", message).then((response: any) => {
+    axios.post(`${messaging_endpoint}/message`, message).then((response: any) => {
         if (!!response && response.status) {
             console.log(response.response);
         } else {
@@ -28,7 +29,6 @@ const postMessage = function (queue: String, email: String[], subject: String, m
     }).catch((error: any) => {
         console.log(`Message failed due to:\n${error}`)
     });
-
 }
 
 const getExpiredOrExpiringExcerpt = function (validUntil: Date): String {

@@ -9,6 +9,6 @@ export class EnvironmentalService {
   constructor(private amplifyService: AmplifyService) {
 
 
-    amplifyService.apiGet().then(value => value.subscribe((x) => console.log(x)));
+    amplifyService.apiGet(1, 2).then(value => value.subscribe((x) => console.log(x)));
   }
 }

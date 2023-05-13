@@ -92,11 +92,12 @@ export class AmplifyService {
     };
   }
 
-  public apiGet() {
+  public apiGet(page:number, maxItems: number) {
     return API.endpoint("simple-sga-api").then((value) =>{
       return this.getHeaders().then(headers => {
         console.log(headers);
-        return  this.httpClient.get(`${value}/api/about`,headers);
+        console.log(this.httpClient.get(`${value}/environmental/about`,headers));
+        return this.httpClient.get(`${value}/environmental/process/?pageNumber=${page}&limit=${maxItems}`,headers);
       })
     })
   }

@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const RABBITMQ_SCHEMA = process.env.RABBITMQ_SCHEMA || "amqp";
-const RABBITMQ_HOST = process.env.SERVER_NAME || "localhost";
+const RABBITMQ_HOST = process.env.RABBITMQ_HOST || "localhost";
 const RABBITMQ_PORT = parseInt(process.env.RABBITMQ_PORT || "5672", 10);
 const RABBITMQ_USER = process.env.RABBITMQ_USER || "quest";
 const RABBITMQ_PASS = process.env.RABBITMQ_PASSWORD || "quest";

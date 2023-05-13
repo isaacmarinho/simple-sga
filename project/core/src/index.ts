@@ -4,7 +4,8 @@ import * as schedule from 'node-schedule';
 const app = require("./app");
 const axios = require('axios')
 
-const port = process.env.PORT || 3015;
+const SERVER_NAME = process.env.SERVER_NAME || "localhost";
+const PORT = parseInt(process.env.PORT || "3015", 10);
 const messaging_endpoint: string = process.env.MESSAGING_ENDPOINT || "http://localhost:3010/messaging";
 
 let processing: boolean = false;
@@ -38,7 +39,7 @@ const getExpiredOrExpiringExcerpt = function (validUntil: Date): String {
 const processData = async function (pageNumber: number) {
     processing = true;
     console.log("Page", pageNumber);
-    axios.get(`http://localhost:${port}/core/process/?pageNumber=${pageNumber}&limit=1&expiration=year`)
+    axios.get(`http://localhost:${PORT}/core/process/?pageNumber=${pageNumber}&limit=1&expiration=year`)
         .then((response: any) => {
             console.log("DATA", response.data);
             if (!!response.data && response.data.data.count > 0) {
@@ -80,8 +81,8 @@ app.addListener('close', () => {
     }
 })
 
-app.listen(port, () => {
-    console.log(`Core server listening on port ${port}`);
+app.listen(PORT, SERVER_NAME, () => {
+    console.log(`Core server listening on port ${PORT}`);
     const job = schedule.scheduleJob('0/1 * * * *', async function (fireDate: any) {
         console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
         if (!processing) {

@@ -7,10 +7,10 @@ export const environment = {
       region: 'us-east-1',
 
       // OPTIONAL - Amazon Cognito User Pool ID
-      userPoolId: 'USER_POOL_ID',
+      userPoolId: 'us-east-1_kNIxaI3UA',
 
       // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-      userPoolWebClientId: 'USER_POOL_CLIENT',
+      userPoolWebClientId: '73voi5um0j7c04sh1846rsm2p0',
 
       // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
       mandatorySignIn: false,
@@ -27,8 +27,17 @@ export const environment = {
     endpoints: [
       {
         name: "simple-sga-api",
-        endpoint: "ENVIRONMENTAL_ENDPOINT"
+        endpoint: "https://338t05koz4.execute-api.us-east-1.amazonaws.com/simple-sga-environmental-dev"
       }
     ],
   }
 };
+
+/*
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
+ */
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

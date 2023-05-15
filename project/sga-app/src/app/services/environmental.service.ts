@@ -15,4 +15,8 @@ export class EnvironmentalService {
   fetchProcess(pageNumber: number, itemsPerPage: number): Promise<Observable<Result> | Observable<Object>> {
     return this.amplifyService.apiGet(pageNumber, itemsPerPage);
   }
+
+  deleteProcess(id: string) {
+    return this.amplifyService.apiDelete(id);
+  }
 }

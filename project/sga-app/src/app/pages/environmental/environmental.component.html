@@ -1,43 +1,70 @@
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+    <table mat-table [dataSource]="dataSource">
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="project">
-      <th mat-header-cell *matHeaderCellDef> Project </th>
-      <td mat-cell *matCellDef="let element"> {{element.project}} </td>
-    </ng-container>
+        <!-- Position Column -->
+        <!-- Project Column -->
+        <ng-container matColumnDef="project">
+            <th mat-header-cell *matHeaderCellDef> Project</th>
+            <th mat-header-cell *matHeaderCellDef> Project</th>
+            <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+        </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name</th>
+            <th mat-header-cell *matHeaderCellDef> Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
-      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-    </ng-container>
+        <!-- Weight Column -->
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status</th>
+            <th mat-header-cell *matHeaderCellDef> Status</th>
+            <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+        </ng-container>
 
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="valid_since">
-      <th mat-header-cell *matHeaderCellDef> Valid Since </th>
-      <td mat-cell *matCellDef="let element"> {{element.valid_since | date:'dd/M/yyyy'}} </td>
-    </ng-container>
+        <!-- Symbol Column -->
+        <!-- Valid Since Column -->
+        <ng-container matColumnDef="valid_since">
+            <th mat-header-cell *matHeaderCellDef> Valid Since</th>
+            <th mat-header-cell *matHeaderCellDef> Valid Since</th>
+            <td mat-cell *matCellDef="let element"> {{element.valid_since | date:'dd/M/yyyy'}} </td>
+        </ng-container>
 
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="expiration">
-      <th mat-header-cell *matHeaderCellDef> Expiration </th>
-      <td mat-cell *matCellDef="let element"> {{getDueDate(element) | date:'dd/M/yyyy'}} </td>
-    </ng-container>
+        <!-- Symbol Column -->
+        <!-- Expiration Column -->
+        <ng-container matColumnDef="expiration">
+            <th mat-header-cell *matHeaderCellDef> Expiration</th>
+            <th mat-header-cell *matHeaderCellDef> Expiration</th>
+            <td mat-cell *matCellDef="let element"> {{getDueDate(element) | date:'dd/M/yyyy'}} </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions</th>
+            <td mat-cell *matCellDef="let element">
+                <div class="action-button-row">
+                    <div class="action-flex-container">
+                        <div class="action-button-container">
+                            <mat-icon matTooltip="Edit">edit</mat-icon>
+                        </div>
+                        <div class="action-button-container">
+                            <mat-icon matTooltip="Delete" (click)="removeProcess(element)">delete</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </ng-container>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]"
-                 showFirstLastButtons
-                 aria-label="Environmental Process"
-                  (page)="fetchData($event)">
-  </mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]"
+                   showFirstLastButtons
+                   aria-label="Environmental Process"
+                   (page)="fetchData($event)">
+        (page)="fetchData($event)">
+    </mat-paginator>
 </div>

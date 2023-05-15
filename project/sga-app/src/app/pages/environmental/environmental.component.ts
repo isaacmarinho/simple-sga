@@ -11,7 +11,7 @@ import {Process} from "../../../../../shared/interfaces/Process";
   styleUrls: ['./environmental.component.sass']
 })
 export class EnvironmentalComponent implements AfterViewInit {
-  displayedColumns: string[] = ['project', 'name', 'status', 'valid_since', 'expiration'];
+  displayedColumns: string[] = ['project', 'name', 'status', 'valid_since', 'expiration', 'actions'];
   dataSource = new MatTableDataSource<Process>(new Array<Process>);
 
   // @ts-ignore
@@ -34,10 +34,22 @@ export class EnvironmentalComponent implements AfterViewInit {
           if (!!value) {
             console.log((value as Result).data.data);
             that.dataSource = (value as Result).data.data;
+            this.dataSource = (value as Result).data.data;
             this.paginator.pageSize = (value as Result).data.rowsPerPage;
             this.paginator.length = (value as Result).data.count;
             this.paginator.pageIndex = (value as Result).data.pageNumber;
           }
+        });
+      }
+    });
+  }
+
+  removeProcess(process: Process) {
+    this.environmentalService.deleteProcess(process._id).then((result) => {
+      if (!!result) {
+        result?.subscribe(value => {
+          const pageEvent: PageEvent = this.paginator;
+          this.fetchData(pageEvent);
         });
       }
     });

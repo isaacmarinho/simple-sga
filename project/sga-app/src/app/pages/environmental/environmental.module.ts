@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EnvironmentalComponent } from './environmental.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatIconModule} from "@angular/material/icon";
 
 
 
@@ -13,7 +14,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
   imports: [
     CommonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatIconModule
   ]
 })
 export class EnvironmentalModule { }

@@ -80,14 +80,28 @@ processRoute.get("/", async (req: Request, res: Response) => {
 
         const dbo = client.db(SGA_DB);
 
+        console.log("URL: {}",req.url);
+        console.log("ORIG. URL: {}", req.originalUrl);
         const {query} = req;
-        let pageNumber: number = parseInt(String(query.pageNumber)) || 0;
-        if (pageNumber > 0) {
-            pageNumber -= 1;
-        }
+        console.log(req.query);
+        console.log(query);
+        let pageNumber: number = parseInt(String(query.pageNumber)|| "0",10);
+        console.log(pageNumber);
+        // if (pageNumber > 0) {
+        //     pageNumber -= 1;
+        // }
 
-        const limit = parseInt(String(query.limit)) || 12;
-        const result: Result = {count: 0, rowsPerPage: 0, data: null, next: null, previous: null};
+        const limit = parseInt(String(query.limit) || "5", 10);
+        console.log(limit);
+        const result: Result = {
+            count: 0,
+            rowsPerPage: limit,
+            data: null,
+            pageNumber: pageNumber,
+            next: null,
+            previous: null
+        };
+
         const totalProcesses = await dbo.collection("process").countDocuments();
         let startIndex = pageNumber * limit;
         const endIndex = (pageNumber + 1) * limit;
@@ -95,14 +109,14 @@ processRoute.get("/", async (req: Request, res: Response) => {
 
         if (startIndex > 0) {
             result.previous = {
-                pageNumber: pageNumber > 1 ? pageNumber - 1 : pageNumber,
+                pageNumber: pageNumber - 1,
                 limit: limit,
             };
         }
 
         if (endIndex <= (await dbo.collection("process").countDocuments())) {
             result.next = {
-                pageNumber: pageNumber + 2,
+                pageNumber: pageNumber + 1,
                 limit: limit,
             };
         }
@@ -114,7 +128,7 @@ processRoute.get("/", async (req: Request, res: Response) => {
         result.rowsPerPage = limit;
 
         if (result.count > 0) {
-            return res.json({msg: "Process Fetched successfully", data: result});
+            return res.json({msg: "Process.ts Fetched successfully", data: result});
         } else {
             return res.json({msg: "No process to fetch", data: result});
         }
@@ -172,7 +186,7 @@ processRoute.delete("/remove/:processId", async (req: Request, res: Response) =>
                 result = res.json({msg: message, data: reason});
             });
         } else {
-            result = res.json({msg: "Process doesn't exist!", data: req.params.processId});
+            result = res.json({msg: "Process.ts doesn't exist!", data: req.params.processId});
         }
     } catch (e) {
         console.log(e);
@@ -203,7 +217,7 @@ processRoute.patch("/update/:processId", async (req: Request, res: Response) => 
                 result = res.json({msg: message, data: reason});
             });
         } else {
-            result = res.json({msg: "Process doesn't exist!", data: req.params.processId});
+            result = res.json({msg: "Process.ts doesn't exist!", data: req.params.processId});
         }
     } catch (e) {
         console.log(e);

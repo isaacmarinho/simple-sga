@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 
+const bodyParser = require('body-parser');
 const aboutRouter = require("./routes/about");
 const processRouter = require("./routes/process");
 
@@ -10,6 +11,7 @@ const PORT = parseInt(process.env.SERVER_PORT || "3001", 10);
 const HOST_NAME = process.env.SERVER_NAME || "localhost";
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("client"));
 

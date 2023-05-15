@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {EnvironmentalService} from "../../services/environmental.service";
-import * as Process from "process";
+import {Result} from "../../../../../shared/interfaces/Result";
+import {Process} from "../../../../../shared/interfaces/Process";
 
 @Component({
   selector: 'app-environmental',
@@ -11,7 +12,7 @@ import * as Process from "process";
 })
 export class EnvironmentalComponent implements AfterViewInit {
   displayedColumns: string[] = ['project', 'name', 'status', 'valid_since', 'expiration'];
-  dataSource = new MatTableDataSource<Process>(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<Process>(new Array<Process>);
 
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -20,9 +21,27 @@ export class EnvironmentalComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  // constructor(private environmentalService: EnvironmentalService) {
-  //
-  // }
+  constructor(private environmentalService: EnvironmentalService) {
+    this.fetchData(null);
+  }
+
+  fetchData(event?: PageEvent | null) {
+    console.log(event);
+    let that = this;
+    this.environmentalService.fetchProcess(event?.pageIndex || 0, event?.pageSize || 5).then((result) => {
+      if (!!result) {
+        result?.subscribe(value => {
+          if (!!value) {
+            console.log((value as Result).data.data);
+            that.dataSource = (value as Result).data.data;
+            this.paginator.pageSize = (value as Result).data.rowsPerPage;
+            this.paginator.length = (value as Result).data.count;
+            this.paginator.pageIndex = (value as Result).data.pageNumber;
+          }
+        });
+      }
+    });
+  }
 
   getDueDate(process: Process) {
     const dueDate = new Date(process.valid_since);
@@ -30,20 +49,3 @@ export class EnvironmentalComponent implements AfterViewInit {
     return dueDate;
   }
 }
-
-export interface Process {
-  project: string;
-  name: string;
-  status: string;
-  valid_since: Date;
-  expiration: number;
-}
-
-const ELEMENT_DATA: Process[] = [
-  {project: "TEST01", name: "TEST", status: "LP", valid_since: new Date(), expiration: 1},
-  {project: "TEST02", name: "TEST 2", status: "LP", valid_since: new Date(), expiration: 2},
-  {project: "TEST03", name: "TEST 3", status: "LP", valid_since: new Date(), expiration: 5},
-  {project: "TEST01", name: "TEST 10", status: "LP", valid_since: new Date(), expiration: 10},
-  {project: "TEST02", name: "TEST 20", status: "LP", valid_since: new Date(), expiration: 20},
-  {project: "TEST03", name: "TEST 30", status: "LP", valid_since: new Date(), expiration: 30},
-];

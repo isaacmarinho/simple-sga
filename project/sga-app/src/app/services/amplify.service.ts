@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import Amplify, {API, Auth} from 'aws-amplify';
 
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Result} from "../../../../shared/interfaces/Result";
+import {Process} from "../../../../shared/interfaces/Process";
 
 export interface IUser {
   email: string;
@@ -92,12 +94,34 @@ export class AmplifyService {
     };
   }
 
-  public apiGet(page:number, maxItems: number) {
-    return API.endpoint("simple-sga-api").then((value) =>{
+  public async apiInsert(process: Process) {
+    return await API.endpoint("simple-sga-api").then((value) => {
       return this.getHeaders().then(headers => {
-        console.log(headers);
-        console.log(this.httpClient.get(`${value}/environmental/about`,headers));
-        return this.httpClient.get(`${value}/environmental/process/?pageNumber=${page}&limit=${maxItems}`,headers);
+        return this.httpClient.post(`${value}/environmental/process/add`, process, headers);
+      })
+    })
+  }
+
+  public async apiUpdate(process: Process) {
+    return await API.endpoint("simple-sga-api").then((value) => {
+      return this.getHeaders().then(headers => {
+        return this.httpClient.patch(`${value}/environmental/process/update`, process, headers);
+      })
+    })
+  }
+
+  public async apiGet(page: number, maxItems: number): Promise<Observable<Result> | Observable<Object>> {
+    return await API.endpoint("simple-sga-api").then((value) => {
+      return this.getHeaders().then(headers => {
+        return this.httpClient.get(`${value}/environmental/process/?pageNumber=${page}&limit=${maxItems}`, headers);
+      })
+    })
+  }
+
+  public async apiDelete(id: string) {
+    return await API.endpoint("simple-sga-api").then((value) => {
+      return this.getHeaders().then(headers => {
+        return this.httpClient.delete(`${value}/environmental/process/remove/${id}`, headers);
       })
     })
   }

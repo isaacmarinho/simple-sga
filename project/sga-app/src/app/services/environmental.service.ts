@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AmplifyService} from "./amplify.service";
+import {Result} from "../../../../shared/interfaces/Result";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +10,9 @@ export class EnvironmentalService {
 
   constructor(private amplifyService: AmplifyService) {
 
+  }
 
-    amplifyService.apiGet(1, 2).then(value => value.subscribe((x) => console.log(x)));
+  fetchProcess(pageNumber: number, itemsPerPage: number): Promise<Observable<Result> | Observable<Object>> {
+    return this.amplifyService.apiGet(pageNumber, itemsPerPage);
   }
 }

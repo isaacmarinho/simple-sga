@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import Amplify, {API, Auth} from 'aws-amplify';
+import {Amplify, API, Auth} from 'aws-amplify';
 
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpHeaders} from "@angular/common/http";

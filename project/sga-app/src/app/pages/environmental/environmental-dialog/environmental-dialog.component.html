@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>{{capitalizeFirstLetter(data.action)}} Process</h1>
+<div mat-dialog-content class="environmental">
+  <mat-form-field appearance="fill">
+    <mat-label>Project</mat-label>
+    <input matInput [(ngModel)]="data.process.project">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.process.name">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Code</mat-label>
+    <input matInput [(ngModel)]="data.process.code">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Valid Since</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="data.process.valid_since">
+    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Expiration</mat-label>
+    <input matInput type="number" [min]="1" [max]="5" [(ngModel)]="data.process.expiration">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Status</mat-label>
+    <mat-select [ngModel]="data.process.status">
+      <mat-option *ngFor="let licence of LICENCES" [value]="licence.code">
+        {{licence.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Tags</mat-label>
+    <input matInput [(ngModel)]="data.process.tags">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Subscribers</mat-label>
+    <input matInput [(ngModel)]="data.process.subscribers">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Attachments</mat-label>
+    <input matInput [(ngModel)]="data.process.attachments">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data.process" cdkFocusInitial>Save</button>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+</div>

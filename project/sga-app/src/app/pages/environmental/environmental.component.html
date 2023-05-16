@@ -1,17 +1,14 @@
 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
 
-        <!-- Position Column -->
         <!-- Project Column -->
         <ng-container matColumnDef="project">
-            <th mat-header-cell *matHeaderCellDef> Project</th>
             <th mat-header-cell *matHeaderCellDef> Project</th>
             <td mat-cell *matCellDef="let element"> {{element.project}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Name</th>
             <th mat-header-cell *matHeaderCellDef> Name</th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
@@ -20,11 +17,9 @@
         <!-- Status Column -->
         <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef> Status</th>
-            <th mat-header-cell *matHeaderCellDef> Status</th>
             <td mat-cell *matCellDef="let element"> {{element.status}} </td>
         </ng-container>
 
-        <!-- Symbol Column -->
         <!-- Valid Since Column -->
         <ng-container matColumnDef="valid_since">
             <th mat-header-cell *matHeaderCellDef> Valid Since</th>
@@ -32,22 +27,31 @@
             <td mat-cell *matCellDef="let element"> {{element.valid_since | date:'dd/M/yyyy'}} </td>
         </ng-container>
 
-        <!-- Symbol Column -->
         <!-- Expiration Column -->
         <ng-container matColumnDef="expiration">
-            <th mat-header-cell *matHeaderCellDef> Expiration</th>
             <th mat-header-cell *matHeaderCellDef> Expiration</th>
             <td mat-cell *matCellDef="let element"> {{getDueDate(element) | date:'dd/M/yyyy'}} </td>
         </ng-container>
 
         <!-- Actions Column -->
         <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> Actions</th>
+            <th mat-header-cell *matHeaderCellDef>
+                <div class="action-button-row">
+                    <div class="action-flex-container">
+                        <div class="action-button-container">
+                            <span>Actions</span>
+                        </div>
+                        <div class="action-button-container">
+                            <mat-icon class="header" matTooltip="Create New" (click)="openDialog('edit', null)">post_add</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </th>
             <td mat-cell *matCellDef="let element">
                 <div class="action-button-row">
                     <div class="action-flex-container">
                         <div class="action-button-container">
-                            <mat-icon matTooltip="Edit">edit</mat-icon>
+                            <mat-icon matTooltip="Edit" (click)="openDialog('edit', element)">edit</mat-icon>
                         </div>
                         <div class="action-button-container">
                             <mat-icon matTooltip="Delete" (click)="removeProcess(element)">delete</mat-icon>

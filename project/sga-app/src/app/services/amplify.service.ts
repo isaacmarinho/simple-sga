@@ -102,10 +102,10 @@ export class AmplifyService {
     })
   }
 
-  public async apiUpdate(process: Process) {
+  public async apiUpdate(id: string, process: Partial<Process>) {
     return await API.endpoint("simple-sga-api").then((value) => {
       return this.getHeaders().then(headers => {
-        return this.httpClient.patch(`${value}/environmental/process/update`, process, headers);
+        return this.httpClient.patch(`${value}/environmental/process/update/${id}`, process, headers);
       })
     })
   }

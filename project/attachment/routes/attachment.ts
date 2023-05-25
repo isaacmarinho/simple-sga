@@ -1,8 +1,13 @@
 import {Request, Response, Router} from "express";
 import dotenv from "dotenv";
 import fs from "fs";
+import * as console from "console";
+import {randomUUID} from "crypto";
+import {rimraf} from "rimraf";
 
+const getDirName = require('path').dirname;
 const WebHdfs = require("webhdfs");
+const uploadFile = require("../middleware/upload");
 
 dotenv.config();
 
@@ -21,39 +26,118 @@ const hdfs = WebHdfs.createClient({
 const attachmentRoute = Router();
 
 attachmentRoute.post("/add", async (req: Request, res: Response) => {
-    const localFileStream = fs.createReadStream("./README.md");
-    const remoteFileStream = hdfs.createWriteStream("README.md");
+    try {
+        await uploadFile(req, res);
+    } catch (err: any) {    // error handling
+        if (err.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "File larger than 2MB cannot be uploaded!",
+            });
+        }
+        res.status(500).send({
+            message: `Unable to upload the file: ${req.file?.originalname}. ${err}`,
+        });
+    }
+
+    const filename = req.file?.originalname;
+    const tempFile = `./temp/uploads/${req.file?.originalname}`;
+    const localFileStream = fs.createReadStream(tempFile);
+    const remoteFileStream = hdfs.createWriteStream(`/environmental/${filename}`);
     localFileStream.pipe(remoteFileStream);
 
     let error: any = null;
     remoteFileStream.on("error", (err: any) => {
+        console.log("Error");
         error = err;
         console.log(err);
     });
 
     remoteFileStream.on("finish", (value: any) => {
+        fs.stat(tempFile, (err, stats) => {
+            if (!err) {
+                rimraf.native(tempFile);
+            }
+        });
+        console.log("Finish");
         if (!error) {
             res.send({msg: "File saved!", data: value});
         } else {
             res.send({msg: "Failed to save file."})
         }
-    })
+    });
+    /*fs.writeFile(tempFile, file as Buffer, () => {
+        const localFileStream = fs.createReadStream(tempFile);
+        const remoteFileStream = hdfs.createWriteStream(`/environmental/${filename}`);
+        localFileStream.pipe(remoteFileStream);
+
+        let error: any = null;
+        remoteFileStream.on("error", (err: any) => {
+            console.log("Error");
+            error = err;
+            console.log(err);
+        });
+
+        remoteFileStream.on("finish", (value: any) => {
+            fs.stat(tempFile, (err, stats) => {
+                if (!err) {
+                    rimraf.native(tempFile);
+                }
+            });
+            console.log("Finish");
+            if (!error) {
+                res.send({msg: "File saved!", data: value});
+            } else {
+                res.send({msg: "Failed to save file."})
+            }
+        })
+    });*/
 })
 
-attachmentRoute.post("/get/:filename", async (req: Request, res: Response) => {
+attachmentRoute.get("/get/:filename", async (req: Request, res: Response) => {
     const filename: String = req.params.filename;
-    const remoteFileStream = hdfs.createReadStream("README.md");
+    const remoteFileStream = hdfs.createReadStream(`/environmental/${filename}`);
+    const tempFile = `./temp/${randomUUID()}/${filename}`;
 
+    let hasErrors: boolean = false;
+    let errorMessage: any;
     remoteFileStream.on("error", (err: any) => {
-        console.log(err);
+        hasErrors = true;
+        errorMessage = {msg: "Failed to load file!", data: err};
     });
 
+    let buff: Buffer;
     remoteFileStream.on("data", (chunk: any) => {
-        res.send({msg: "Loading file", data: chunk})
+        buff = chunk;
     });
 
     remoteFileStream.on("finish", (value: any) => {
-        res.send({msg: "File loaded!", data: value})
+        console.log("File loaded!", buff);
+        fs.mkdir(getDirName(tempFile), {recursive: true}, function (err) {
+            if (err) {
+                hasErrors = true;
+                console.log(err);
+                errorMessage = {msg: "Failed to load file!", data: err};
+                return;
+            }
+            console.log(buff);
+            fs.writeFile(tempFile, buff, {encoding: "hex"}, (err) => {
+                if (err) {
+                    hasErrors = true;
+                    console.log(err);
+                    errorMessage = {msg: "Failed to load file!", data: err};
+                } else {
+                    res.download(tempFile, () => {
+                        console.log(getDirName(tempFile));
+                        rimraf.native(getDirName(tempFile));
+                    });
+                }
+                return;
+            });
+        });
+
+        if (hasErrors) {
+            res.send(errorMessage);
+        }
     });
 })
 

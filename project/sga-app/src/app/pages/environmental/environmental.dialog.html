@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{data.action}} Process</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Project</mat-label>
+    <input matInput [(ngModel)]="data.process.project">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.process.name">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Code</mat-label>
+    <input matInput [(ngModel)]="data.process.code">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Tags</mat-label>
+    <input matInput [(ngModel)]="data.process.project">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data.process" cdkFocusInitial>Save</button>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+</div>

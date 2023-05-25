@@ -5,20 +5,6 @@ import {Expiration} from "../../../shared/enums/Expiration";
 import dayjs, {OpUnitType} from "dayjs";
 import * as console from "console";
 
-export interface Process {
-    project: string;
-    code: string;
-    name: string;
-    status: string;
-    tags: string[];
-    subscribers: string[];
-    valid_since: Date;
-    expiration: number;
-    creation_date: Date;
-    created_by: string;
-    last_update: Date;
-}
-
 dotenv.config();
 
 const DB_HOST = process.env.DATABASE_SERVER_NAME;
@@ -57,7 +43,7 @@ export const getAllContracts = async (pageNumber: number, limit: number) => {
         await connect();
 
         const dbo = client.db(SGA_DB);
-        const result: Result = {count: 0, rowsPerPage: 0, data: null, next: null, previous: null};
+        const result: Result = {count: 0, pageNumber: 0, rowsPerPage: 0, data: null, next: null, previous: null};
         const totalProcesses = await dbo.collection("process").countDocuments();
         let startIndex = pageNumber * limit;
         const endIndex = (pageNumber + 1) * limit;
@@ -129,7 +115,7 @@ export const getExpiringAndExpiredContracts = async (expiration: string | Expira
         await connect();
 
         const dbo = client.db(SGA_DB);
-        const result: Result = {count: 0, rowsPerPage: 0, data: null, next: null, previous: null};
+        const result: Result = {count: 0, pageNumber: 0, rowsPerPage: 0, data: null, next: null, previous: null};
 
         const pipeline = [
             {

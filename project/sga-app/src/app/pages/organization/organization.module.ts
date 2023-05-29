@@ -1,8 +1,9 @@
-import {NgModule} from '@angular/core';
+import {NgModule, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OrganizationComponent} from './organization.component';
-import {RouterModule} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
 import {ORGANIZATION_ROUTE} from "./organization.route";
+import {AuthenticatorService} from "@aws-amplify/ui-angular";
 
 
 @NgModule({
@@ -14,5 +15,13 @@ import {ORGANIZATION_ROUTE} from "./organization.route";
     RouterModule.forChild([ORGANIZATION_ROUTE])
   ]
 })
-export class OrganizationModule {
+export class OrganizationModule implements OnInit {
+
+  constructor(private router: Router, private authenticator: AuthenticatorService) { }
+
+  ngOnInit(): void {
+    if(this.authenticator.route !== "authenticated"){
+      this.router.navigateByUrl("/login").then(r => console.log("Navigate to login"));
+    }
+  }
 }

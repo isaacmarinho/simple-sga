@@ -14,9 +14,9 @@ const postMessage = function (queue: String, email: String[], subject: String, m
     const message = {
         "queueName": "environmental-queue",
         "payload": {
-            "recipients": ["isaacmarinho@gmail.com"],
+            "recipients": email,
             "from": "",
-            "subject": "Expiring Environmental process",
+            "subject": subject,
             "body": `This is a test.\n${messageBody}\nCheers`
         }
     };
@@ -39,7 +39,7 @@ const getExpiredOrExpiringExcerpt = function (validUntil: Date): String {
 const processData = async function (pageNumber: number) {
     processing = true;
     console.log("Page", pageNumber);
-    axios.get(`http://localhost:${PORT}/core/process/?pageNumber=${pageNumber}&limit=1&expiration=year`)
+    axios.get(`http://localhost:${PORT}/core/process/?pageNumber=${pageNumber}&limit=50&expiration=YEAR`)
         .then((response: any) => {
             console.log("DATA", response.data);
             if (!!response.data && response.data.data.count > 0) {
@@ -51,14 +51,16 @@ const processData = async function (pageNumber: number) {
 
                     setTimeout(() => {
                         postMessage("environmental-queue",
-                            ["isaacmarinho@gmail.com"],
-                            "Expiring Environmental Processes",
+                            processes.subscribers,
+                            `[Expiring Environmental Processes] ${process.project}/${process.name}`,
                             `<p>Process ${process.project}/${process.name} ${getExpiredOrExpiringExcerpt(new Date(process.valid_until))}!</p>
                                 <h3>Check it out...</h3>
                                 <p><strong>Valid Since:</strong> ${new Date(process.valid_since).toLocaleDateString('en-GB')}</p>
                                 <p><strong>Valid Util:</strong> ${new Date(process.valid_until).toLocaleDateString('en-GB')}</p>`);
                         console.log("PostMessage end.");
+
                     }, 2000);
+
                 });
                 if (!!next) {
 
@@ -86,7 +88,7 @@ app.listen(PORT, SERVER_NAME, () => {
     const job = schedule.scheduleJob('0/1 * * * *', async function (fireDate: any) {
         console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
         if (!processing) {
-            await processData(1);
+            await processData(0);
         } else {
             console.log("Processing already");
         }

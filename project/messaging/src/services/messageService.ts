@@ -8,8 +8,8 @@ dotenv.config();
 const RABBITMQ_SCHEMA = process.env.RABBITMQ_SCHEMA || "amqp";
 const RABBITMQ_HOST = process.env.RABBITMQ_HOST || "localhost";
 const RABBITMQ_PORT = parseInt(process.env.RABBITMQ_PORT || "5672", 10);
-const RABBITMQ_USER = process.env.RABBITMQ_USER || "quest";
-const RABBITMQ_PASS = process.env.RABBITMQ_PASSWORD || "quest";
+const RABBITMQ_USER = process.env.RABBITMQ_USER || "guest";
+const RABBITMQ_PASS = process.env.RABBITMQ_PASSWORD || "guest";
 
 const RABBITMQ_URL = `${RABBITMQ_SCHEMA}://${RABBITMQ_USER}:${RABBITMQ_PASS}@${RABBITMQ_HOST}:${RABBITMQ_PORT}/`;
 

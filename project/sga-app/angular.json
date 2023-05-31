@@ -19,10 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "@aws-amplify/auth",
-              "@aws-amplify/auth",
               "@aws-amplify/core",
               "@aws-amplify/storage",
-              "@aws-amplify/ui",
               "@aws-amplify/ui-components",
               "@aws-crypto/crc32",
               "@aws-crypto/sha256-js",

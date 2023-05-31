@@ -149,14 +149,14 @@ export const getExpiringAndExpiredContracts = async (expiration: string | Expira
 
         if (startIndex > 0) {
             result.previous = {
-                pageNumber: pageNumber > 1 ? pageNumber - 1 : pageNumber,
+                pageNumber: pageNumber > 0 ? pageNumber - 1 : pageNumber,
                 limit: limit,
             };
         }
 
         if (endIndex <= ((await dbo.collection("process").aggregate(pipelineCount).toArray())[0]?.totalDocuments || 0)) {
             result.next = {
-                pageNumber: pageNumber + 2,
+                pageNumber: pageNumber + 1,
                 limit: limit,
             };
         }
@@ -177,5 +177,15 @@ export const getExpiringAndExpiredContracts = async (expiration: string | Expira
     } finally {
         // Ensures that the client will close when you finish/error
         await client.close();
+    }
+}
+
+export const getProcessesSummary = async (expiration: string | Expiration, pageNumber: number, limit: number) => {
+    return {
+        summary: {expired: 2, valid: 30, about_to_expire: 13, total: 45},
+        expiration: expiration,
+        source: "environmental",
+        date: new Date(),
+        note: "Mocked data."
     }
 }

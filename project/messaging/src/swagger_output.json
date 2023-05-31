@@ -1,0 +1,81 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Messaging API",
+    "description": "Messaging microservice API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3010/messaging"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "description": "Adiciona uma mensagem à fila de mensagens informada.",
+        "parameters": [],
+        "responses": {},
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "description": "Exibe informações sobre o microsserviço",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Message": {
+        "type": "object",
+        "properties": {
+          "$queueName": {
+            "type": "string",
+            "description": "Fila de mensagens alvo."
+          },
+          "$payload": {
+            "type": "object",
+            "description": "Dados da mensagem.",
+            "properties": {
+              "$recipients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Lista de e-mails dos destinatários."
+              },
+              "from": {
+                "type": "string",
+                "description": "Email do remetente (opcional)"
+              },
+              "$subject": {
+                "type": "string",
+                "description": "Assunto do e-mail"
+              },
+              "$body": {
+                "type": "string",
+                "description": "Corpo do e-mail"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

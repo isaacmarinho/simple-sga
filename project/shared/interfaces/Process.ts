@@ -1,5 +1,5 @@
 export interface Process {
-    _id: string;
+    _id: Object | undefined;
     project: string;
     code: string;
     name: string;

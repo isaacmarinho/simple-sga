@@ -1,27 +1,21 @@
-import {DeleteResult, Document, InsertOneResult, MongoClient, ObjectId, OptionalId, UpdateResult} from "mongodb";
+import {
+    BSONType,
+    DeleteResult,
+    Document,
+    InsertOneResult,
+    MongoClient,
+    ObjectId,
+    OptionalId,
+    UpdateResult
+} from "mongodb";
 
 import {Request, Response, Router} from "express";
 import {Result} from "../../shared/interfaces/Result";
 import dotenv from "dotenv";
 import {Attachment} from "../../shared/interfaces/Attachment";
-
+import {Process} from "../../shared/interfaces/Process";
 
 const processRoute = Router();
-
-
-export interface Process {
-    project: string;
-    code: string;
-    name: string;
-    status: string;
-    tags: string[];
-    subscribers: string[];
-    expiration: number;
-    attachments: Attachment[];
-    creation_date: Date;
-    created_by: string;
-    last_update: Date;
-}
 
 dotenv.config();
 
@@ -74,22 +68,31 @@ async function getProcess(processId: String) {
 }
 
 processRoute.get("/", async (req: Request, res: Response) => {
+    /// #swagger.description = 'Lista todos os processos ambientais registrados.'
+    /*  #swagger.path = '/process/'
+        #swagger.parameters['pageNumber'] = {
+            in: 'query',
+            type: 'integer',
+            description: 'Índice da página (iniciando por zero - o default é zero)' }
+
+        #swagger.parameters['limit'] = {
+            in: 'query',
+            type: 'integer',
+            description: 'Número de registros por página (o default é 5)' }
+          */
     try {
 
         await connect();
 
         const dbo = client.db(SGA_DB);
 
-        console.log("URL: {}",req.url);
+        console.log("URL: {}", req.url);
         console.log("ORIG. URL: {}", req.originalUrl);
         const {query} = req;
         console.log(req.query);
         console.log(query);
-        let pageNumber: number = parseInt(String(query.pageNumber)|| "0",10);
+        let pageNumber: number = parseInt(String(query.pageNumber) || "0", 10);
         console.log(pageNumber);
-        // if (pageNumber > 0) {
-        //     pageNumber -= 1;
-        // }
 
         const limit = parseInt(String(query.limit) || "5", 10);
         console.log(limit);
@@ -128,7 +131,7 @@ processRoute.get("/", async (req: Request, res: Response) => {
         result.rowsPerPage = limit;
 
         if (result.count > 0) {
-            return res.json({msg: "Process.ts Fetched successfully", data: result});
+            return res.json({msg: "Process fetched successfully", data: result});
         } else {
             return res.json({msg: "No process to fetch", data: result});
         }
@@ -141,6 +144,13 @@ processRoute.get("/", async (req: Request, res: Response) => {
 })
 
 processRoute.post("/add", async (req: Request, res: Response) => {
+    /// #swagger.description = 'Cria um novo processo.'
+    /*  #swagger.path = '/process/add'
+        #swagger.requestBody = {
+              required: true,
+              schema: { $ref: "#/definitions/Process" }
+          }
+          */
     let result: any = null;
     try {
         if (!!req.body) {
@@ -148,6 +158,9 @@ processRoute.post("/add", async (req: Request, res: Response) => {
             const dbo = client.db(SGA_DB);
             const process: OptionalId<Process> = req.body;
             console.log(process);
+            if(process.valid_since instanceof String){
+                process.valid_since = new Date(process.valid_since);
+            }
             await dbo.collection("process").insertOne(process).then((value: InsertOneResult) => {
                 const message = value.acknowledged ? "Successfully added!" : "Nothing added!";
                 result = res.json({msg: message, data: value});
@@ -169,6 +182,8 @@ processRoute.post("/add", async (req: Request, res: Response) => {
 })
 
 processRoute.delete("/remove/:processId", async (req: Request, res: Response) => {
+    /// #swagger.description = 'Remove um processo.'
+    /// #swagger.path = '/process/remove/{processId}'
     let result: any = null;
     try {
         if (!!req.params.processId) {
@@ -186,7 +201,7 @@ processRoute.delete("/remove/:processId", async (req: Request, res: Response) =>
                 result = res.json({msg: message, data: reason});
             });
         } else {
-            result = res.json({msg: "Process.ts doesn't exist!", data: req.params.processId});
+            result = res.json({msg: "Process doesn't exist!", data: req.params.processId});
         }
     } catch (e) {
         console.log(e);
@@ -199,6 +214,17 @@ processRoute.delete("/remove/:processId", async (req: Request, res: Response) =>
 })
 
 processRoute.patch("/update/:processId", async (req: Request, res: Response) => {
+    /// #swagger.description = 'Altera um processo existente.'
+    /*  #swagger.path = '/process/update/{processId}'
+        #swagger.requestBody = {
+              required: true,
+              content: {
+                  "application/json": {
+                      schema: { $ref: "#/definitions/Process" }
+                  }
+              }
+          }
+          */
     let result: any = null;
     try {
         if (!!req.params.processId && !!req.body) {
@@ -217,7 +243,7 @@ processRoute.patch("/update/:processId", async (req: Request, res: Response) => 
                 result = res.json({msg: message, data: reason});
             });
         } else {
-            result = res.json({msg: "Process.ts doesn't exist!", data: req.params.processId});
+            result = res.json({msg: "Process doesn't exist!", data: req.params.processId});
         }
     } catch (e) {
         console.log(e);

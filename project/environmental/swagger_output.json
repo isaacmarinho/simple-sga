@@ -1,0 +1,175 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Environmental API",
+    "description": "Environmental microservice API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/environmental"
+    }
+  ],
+  "paths": {
+    "/process/": {
+      "get": {
+        "description": "Lista todos os processos ambientais registrados.",
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Índice da página (iniciando por zero - o default é zero)",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Número de registros por página (o default é 5)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/process/add": {
+      "post": {
+        "description": "Cria um novo processo.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Process"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Process"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/process/remove/{processId}": {
+      "delete": {
+        "description": "Remove um processo.",
+        "parameters": [
+          {
+            "name": "processId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/process/update/{processId}": {
+      "patch": {
+        "description": "Altera um processo existente.",
+        "parameters": [
+          {
+            "name": "processId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Process"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "description": "About",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Process": {
+        "type": "object",
+        "properties": {
+          "$project": {
+            "type": "string",
+            "description": "Identificador do projeto a que pertence o processo."
+          },
+          "$code": {
+            "type": "string",
+            "description": "Código identificador do processo."
+          },
+          "$name": {
+            "type": "string",
+            "description": "Nome do processo."
+          },
+          "$status": {
+            "type": "string",
+            "description": "Etapa do processo (LP, LI, LO)."
+          },
+          "$valid_since": {
+            "type": "date",
+            "description": "Data de início de vigência do processo."
+          },
+          "$expiration": {
+            "type": "integer",
+            "description": "Número de anos até a expiração do processo."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Etiquetas do processo."
+          },
+          "subscribers": {
+            "type": "array",
+            "description": "Observadores do processo."
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Anexos do processo."
+          }
+        }
+      }
+    }
+  }
+}

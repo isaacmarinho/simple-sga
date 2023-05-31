@@ -29,7 +29,7 @@ export class EnvironmentalComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if(this.authenticator.route !== "authenticated"){
+    if (this.authenticator.route !== "authenticated") {
       this.router.navigateByUrl("/login").then(r => console.log("Navigate to login"));
     }
   }
@@ -55,7 +55,7 @@ export class EnvironmentalComponent implements OnInit, AfterViewInit {
       console.log(value);
       if (!!value) {
         if (action == "edit" && !!process) {
-          this.updateProcess(process._id, this.getProcessDiff(process, value));
+          this.updateProcess(process._id?.toString() ?? "", this.getProcessDiff(process, value));
         } else {
           this.addProcess(value);
         }
@@ -94,7 +94,7 @@ export class EnvironmentalComponent implements OnInit, AfterViewInit {
   }
 
   removeProcess(process: Process) {
-    this.environmentalService.deleteProcess(process._id).then((result) => {
+    this.environmentalService.deleteProcess(process._id?.toString()||"").then((result) => {
       if (!!result) {
         result?.subscribe(value => {
           const pageEvent: PageEvent = this.paginator;

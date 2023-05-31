@@ -1,7 +1,7 @@
-import {DeleteResult, Document, InsertOneResult, MongoClient, ObjectId, OptionalId, UpdateResult} from "mongodb";
+import {MongoClient} from "mongodb";
 import dotenv from "dotenv";
 import {Request, Response} from "express";
-import {getExpiringAndExpiredContracts} from "../services/coreService";
+import {getExpiringAndExpiredContracts, getProcessesSummary} from "../services/coreService";
 import {Expiration} from "../../../shared/enums/Expiration";
 
 dotenv.config();
@@ -30,6 +30,25 @@ async function connect() {
 }
 
 exports.process = async (req: Request, res: Response) => {
+    /// #swagger.start
+    /*  #swagger.auto = false
+        #swagger.path = '/process'
+        #swagger.method = 'get'
+        #swagger.description = 'Lista todos os processos ambientais expirados ou em vias de expirar, dada uma janela de tempo.'
+        #swagger.parameters['expiration'] = {
+            in: 'query',
+            type: 'string',
+            description: 'Janela de tempo da expiração (DAY,WEEK,MONTH,YEAR - o default é YEAR)' }
+        #swagger.parameters['pageNumber'] = {
+            in: 'query',
+            type: 'integer',
+            description: 'Índice da página (iniciando por zero - o default é zero)' }
+
+        #swagger.parameters['limit'] = {
+            in: 'query',
+            type: 'integer',
+            description: 'Número de registros por página (o default é 5)' }
+          */
     try {
 
         await connect();
@@ -39,17 +58,53 @@ exports.process = async (req: Request, res: Response) => {
         const {query} = req;
         const expiration: string | Expiration = String(query.expiration) || Expiration.YEAR;
         let pageNumber: number = parseInt(String(query.pageNumber)) || 0;
-        if (pageNumber > 0) {
-            pageNumber -= 1;
-        }
 
-        const limit = parseInt(String(query.limit)) || 12;
+        const limit = parseInt(String(query.limit)) || 100;
 
         await getExpiringAndExpiredContracts(expiration, pageNumber, limit)
             .then((value) => {
-                res.status(200).send(value);
+                res.status(200).send(value); // #swagger.responses[200]
             });
     } catch (error) {
-        res.status(500).json({error: error});
+        res.status(500).json({error: error}); // #swagger.responses[500]
     }
+    // #swagger.end
+}
+
+exports.summary = async (req: Request, res: Response) => {
+    /// #swagger.start
+    /*  #swagger.auto = false
+        #swagger.path = '/summary/:process_type'
+        #swagger.method = 'get'
+        #swagger.description = 'Exibe um sumário dos processos ambientais, dada uma janela de tempo.'
+        #swagger.parameters['expiration'] = {
+            in: 'query',
+            type: 'string',
+            description: 'Janela de tempo da expiração (DAY,WEEK,MONTH,YEAR - o default é YEAR)' }
+        #swagger.parameters['pageNumber'] = {
+            in: 'query',
+            type: 'integer',
+            description: 'Índice da página (iniciando por zero - o default é zero)' }
+
+        #swagger.parameters['limit'] = {
+            in: 'query',
+            type: 'integer',
+            description: 'Número de registros por página (o default é 5)' }
+          */
+    try {
+
+        const {query} = req;
+        const expiration: string | Expiration = String(query.expiration) || Expiration.YEAR;
+        let pageNumber: number = parseInt(String(query.pageNumber)) || 0;
+
+        const limit = parseInt(String(query.limit)) || 100;
+
+        await getProcessesSummary(expiration, pageNumber, limit)
+            .then((value) => {
+                res.status(200).send(value); // #swagger.responses[200]
+            });
+    } catch (error) {
+        res.status(500).json({error: error}); // #swagger.responses[500]
+    }
+    // #swagger.end
 }

@@ -3,8 +3,9 @@ import {AWS_CONFIG} from "../awsConfig";
 
 let credentials = new AWS.Credentials(AWS_CONFIG.key, AWS_CONFIG.secret);
 
-credentials.refresh((err)=>{console.log(err)});
-console.log(AWS_CONFIG)
+credentials.refresh((err) => {
+    console.log(err)
+});
 AWS.config.update({
     credentials: credentials,
     region: AWS_CONFIG.ses.region

@@ -1,0 +1,88 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Attachment API",
+    "description": "Attachment microservice API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3002/attachment"
+    }
+  ],
+  "paths": {
+    "/file/add": {
+      "post": {
+        "description": "Salva anexo de processo no sistema de arquivos distribuído",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AttachmentForm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file/get/{filename}": {
+      "get": {
+        "description": "Obtém um anexo salvo no sistema de arquivos distribuído.",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Nome do anexo."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "description": "Exibe informações sobre o microsserviço",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AttachmentForm": {
+        "type": "object",
+        "properties": {
+          "$file": {
+            "type": "binary",
+            "description": "Arquivo anexo."
+          },
+          "$processId": {
+            "type": "string",
+            "description": "Identificador do processo."
+          }
+        }
+      }
+    }
+  }
+}

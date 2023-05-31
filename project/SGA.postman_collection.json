@@ -1,0 +1,1320 @@
+{
+	"info": {
+		"_postman_id": "6de8dd3c-6c3c-4eb7-8637-a6b8d527697e",
+		"name": "SGA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12651738"
+	},
+	"item": [
+		{
+			"name": "Environmental",
+			"item": [
+				{
+					"name": "About",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"About\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"name\", 'environmental');\r",
+									"    pm.expect(response).to.have.property(\"description\").contains('Environmental')\r",
+									"    pm.expect(response).to.have.property(\"author\", 'Isaac Marinho');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project\": \"PROJECT{{$guid}}\",\r\n    \"code\": \"PROCESS{{$guid}}\",\r\n    \"name\": \"ENVIRONMENTAL PROCESS {{$randomColor}} {{$randomProductName}}\",\r\n    \"status\": \"LP\",\r\n    \"valid_since\":\"{{$timestamp}}\",\r\n    \"expiration\":5,\r\n    \"tags\": [\"2023\",\"TESTE\", \"{{$randomNoun}}\"],\r\n    \"subscribers\": [\"{{$randomEmail}}\"],\r\n    \"attachments\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/about",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"about"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process / Add",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const dateNow = new Date();\r",
+									"pm.collectionVariables.set('currentDate', dateNow.toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Process was inserted\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"acknowledged\", true);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"insertedId\").that.is.not.empty;\r",
+									"    pm.collectionVariables.set(\"insertedId\", response.data.insertedId);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project\": \"PROJECT{{$guid}}\",\r\n    \"code\": \"PROCESS{{$guid}}\",\r\n    \"name\": \"ENVIRONMENTAL PROCESS {{$randomColor}} {{$randomProductName}}\",\r\n    \"status\": \"LP\",\r\n    \"valid_since\":\"{{currentDate}}\",\r\n    \"expiration\":5,\r\n    \"tags\": [\"2021\",\"TESTE\", \"{{$randomNoun}}\"],\r\n    \"subscribers\": [\"{{$randomEmail}}\"],\r\n    \"attachments\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/add",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Process 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const dateNow = new Date();\r",
+									"pm.collectionVariables.set('currentDate', dateNow.toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Process was inserted\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"acknowledged\", true);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"insertedId\").that.is.not.empty;\r",
+									"    pm.collectionVariables.set(\"insertedId\", response.data.insertedId);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project\": \"PROJECT{{$guid}}\",\r\n    \"code\": \"PROCESS{{$guid}}\",\r\n    \"name\": \"ENVIRONMENTAL PROCESS {{$randomColor}} {{$randomProductName}}\",\r\n    \"status\": \"LP\",\r\n    \"valid_since\":\"{{currentDate}}\",\r\n    \"expiration\":3,\r\n    \"tags\": [\"2022\",\"TESTE\", \"{{$randomNoun}}\"],\r\n    \"subscribers\": [\"{{$randomEmail}}\"],\r\n    \"attachments\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/add",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Process 3",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const dateNow = new Date();\r",
+									"pm.collectionVariables.set('currentDate', dateNow.toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Process was inserted\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"acknowledged\", true);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"insertedId\").that.is.not.empty;\r",
+									"    pm.collectionVariables.set(\"insertedId\", response.data.insertedId);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project\": \"PROJECT{{$guid}}\",\r\n    \"code\": \"PROCESS{{$guid}}\",\r\n    \"name\": \"ENVIRONMENTAL PROCESS {{$randomColor}} {{$randomProductName}}\",\r\n    \"status\": \"LP\",\r\n    \"valid_since\":\"{{currentDate}}\",\r\n    \"expiration\":4,\r\n    \"tags\": [\"2023\",\"TESTE\", \"{{$randomNoun}}\"],\r\n    \"subscribers\": [\"{{$randomEmail}}\"],\r\n    \"attachments\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/add",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Page 1 with 5 items",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"limit\", 5)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get Page 1 with 5 items/page\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"count\").that.is.greaterThan(0);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"rowsPerPage\",5);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"pageNumber\",0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/?pageNumber=0&limit={{limit}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								""
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "{{limit}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Page 2 with 10 items",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"limit\", 10)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get Page 1 with 5 items/page\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"count\").that.is.greaterThan(0);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"rowsPerPage\",10);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"pageNumber\",1);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/?pageNumber=1&limit={{limit}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								""
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "{{limit}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Page 3 with 50 items",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"limit\", 50)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get Page 1 with 5 items/page\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"count\").that.is.greaterThan(0);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"rowsPerPage\",10);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"pageNumber\",1);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/?pageNumber=2&limit={{limit}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								""
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "{{limit}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"random_number\", _.random(1, 5))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Process was modified\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"acknowledged\", true);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"modifiedCount\", 1);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"matchedCount\", 1);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ENVIRONMENTAL PROCESS {{$randomColor}} {{$randomProductName}}\",\r\n    \"status\": \"LP\",\r\n    \"expiration\":{{random_number}},\r\n    \"tags\": [\"2023\",\"TESTE\", \"{{$randomNoun}}\"],\r\n    \"subscribers\": [\"{{$randomEmail}}\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/update/{{insertedId}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								"update",
+								"{{insertedId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    console.log(pm.response);\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Process was removed\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data).to.have.nested.property(\"acknowledged\", true);\r",
+									"    pm.expect(response.data).to.have.nested.property(\"deletedCount\", 1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/environmental/process/remove/{{insertedId}}",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"environmental",
+								"process",
+								"remove",
+								"{{insertedId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Attachment",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "Lj4wjD_b-/Twilio.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/attachment/file/add",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"attachment",
+								"file",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "vkcrFdHE2/regwizard.log"
+								},
+								{
+									"key": "processId",
+									"value": "638704db211cbda583debac7",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3002/attachment/file/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"attachment",
+								"file",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/attachment/file/get/Doc1.docx",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"attachment",
+								"file",
+								"get",
+								"Doc1.docx"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "File / Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/attachment/file/get/Doc1.docx",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"attachment",
+								"file",
+								"get",
+								"Doc1.docx"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "About",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"About\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"name\", 'attachment');\r",
+									"    pm.expect(response).to.have.property(\"description\").contains('Attachments')\r",
+									"    pm.expect(response).to.have.property(\"author\", 'Isaac Marinho');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/attachment/about",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"attachment",
+								"about"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "About Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}//attachment/about",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"",
+								"attachment",
+								"about"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sub\": null,\r\n    \"email\": \"isaac.morais@gmail.com\",\r\n    \"family_name\": \"Morais\",\r\n    \"name\": \"Isaac\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/user/?pageNumber=1&limit=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								""
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sub\": \"11222333\",\r\n    \"email\": \"isaac.morais@gmail.com\",\r\n    \"family_name\": \"Morais\",\r\n    \"name\": \"Isaac\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/update/637710de4fe36a5cbd58cb61",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"update",
+								"637710de4fe36a5cbd58cb61"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/user/remove/637db25c635109c78631d857",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"remove",
+								"637db25c635109c78631d857"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messaging",
+			"item": [
+				{
+					"name": "Send Message 01",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Mensage sent\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"status\", true);\r",
+									"    pm.expect(response).to.have.nested.property(\"response\").that.has.property(\"message-sent\", true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"queueName\": \"environmental-queue\",\r\n    \"payload\": {\r\n        \"recipients\": [\"isaacmarinho@gmail.com\"],\r\n        \"from\": \"\",\r\n        \"subject\": \"Test 01\",\r\n        \"body\": \"This is a test (0001).<br/>{{$randomLoremParagraph}}<br/> Cheers\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/messaging/message",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"messaging",
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message 02",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Mensage sent\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"status\", true);\r",
+									"    pm.expect(response).to.have.nested.property(\"response\").that.has.property(\"message-sent\", true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"queueName\": \"environmental-queue\",\r\n    \"payload\": {\r\n        \"recipients\": [\"isaacmarinho@gmail.com\"],\r\n        \"from\": \"\",\r\n        \"subject\": \"Test 01\",\r\n        \"body\": \"This is a test (0002).<br/>{{$randomLoremLines}}<br/> Cheers\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/messaging/message",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"messaging",
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message 03",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Mensage sent\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"status\", true);\r",
+									"    pm.expect(response).to.have.nested.property(\"response\").that.has.property(\"message-sent\", true);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"queueName\": \"environmental-queue\",\r\n    \"payload\": {\r\n        \"recipients\": [\"isaacmarinho@gmail.com\"],\r\n        \"from\": \"\",\r\n        \"subject\": \"Test 01\",\r\n        \"body\": \"This is a test (0003).<br/>{{$randomLoremSentence}}<br/> Cheers\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/messaging/message",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"messaging",
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "About",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"About\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"name\", 'messaging');\r",
+									"    pm.expect(response).to.have.property(\"description\").contains('Messaging')\r",
+									"    pm.expect(response).to.have.property(\"author\", 'Isaac Marinho');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/messaging/about",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"messaging",
+								"about"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Core",
+			"item": [
+				{
+					"name": "Process",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"limit\", 5)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Get Page 1 with 5 items/page\", function () {\r",
+									"    pm.response.to.have.jsonBody(\"data.data[0].valid_since\");\r",
+									"    pm.response.to.have.jsonBody(\"data.data[0].valid_until\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/core/process/?expiration=YEAR&pageNumber=0&limit=20",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"core",
+								"process",
+								""
+							],
+							"query": [
+								{
+									"key": "expiration",
+									"value": "YEAR"
+								},
+								{
+									"key": "pageNumber",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "About",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"About\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.have.property(\"name\", 'core');\r",
+									"    pm.expect(response).to.have.property(\"description\").contains('Core')\r",
+									"    pm.expect(response).to.have.property(\"author\", 'Isaac Marinho');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/core/about",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"core",
+								"about"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Summary (Teste de modificabilidade)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Get Page 1 with 5 items/page\", function () {\r",
+									"    pm.response.to.have.jsonBody(\"data.summary.valid\");\r",
+									"    pm.response.to.have.jsonBody(\"data.summary.expired\");\r",
+									"    pm.response.to.have.jsonBody(\"data.summary.about_to_expire\");\r",
+									"    pm.response.to.have.jsonBody(\"data.summary.total\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{schema}}://{{host}}:{{port}}/{{api}}/core/process/summary/environmental",
+							"protocol": "{{schema}}",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api}}",
+								"core",
+								"process",
+								"summary",
+								"environmental"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJraWQiOiJ3UXBVUDdRbzVmbFhxdzNSWjl6RGdpWEtkbnROZTNodlhQMjV3d0NsWVZzPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI5ODc1N2RjNi00MTViLTQzNjEtODViMC1lYzEyNjc2ZWZhZTYiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbiJdLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfa05JeGFJM1VBIiwiY29nbml0bzp1c2VybmFtZSI6Ijk4NzU3ZGM2LTQxNWItNDM2MS04NWIwLWVjMTI2NzZlZmFlNiIsIm9yaWdpbl9qdGkiOiI0ZDQ3OTA2ZS02NWQwLTRhNTgtYWY4Mi01MmU0MGJkNmQxN2UiLCJhdWQiOiI3M3ZvaTV1bTBqN2MwNHNoMTg0NnJzbTJwMCIsImV2ZW50X2lkIjoiNzM0MjA5MzctZDI2Ni00MzI0LWI1ODgtZjM4YWYxZTgzNmRmIiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE2ODUzODgzMzEsImV4cCI6MTY4NTQ1NzI1NSwiaWF0IjoxNjg1NDUzNjU1LCJqdGkiOiIzNDlmZGU2MC01Zjg3LTQ4MzgtODkyYS0yMjg2M2Q2NDIxYzEiLCJlbWFpbCI6ImlzYWFjbWFyaW5ob0BnbWFpbC5jb20ifQ.t_GVtlZ4DVZLSYgvRPpio9JkFkhbC9a4V26xD5YPt2xdnWg4DhoWqjjBH4hQ_hgMRbzs63SpgLltkIyTQ4vde8It8DTCYU5B7u5rQpwLVnupst0yd1T0Z-sSjf5dYD08jNuCpteT4AxMfmkg0sryVDlTGraDgvCNTayoULGN5TsmoCrw4ePUoNYM5w8bqAoLDkyUYrj0YoWBiOMpFavj-y3H2vQ_-N52p6cLXargdr5jHm6gIe82rr2gnGgirj6zl-lSA1EXDk89OOwxQGMu2ecWxEiA_Vb4JFvfBvevlsQnWxGgBf1buj6D1AmA1BeQ4g2h1SjhNBHI9W24w0d_dQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "schema",
+			"value": "http"
+		},
+		{
+			"key": "host",
+			"value": "localhost"
+		},
+		{
+			"key": "port",
+			"value": "3015"
+		},
+		{
+			"key": "api",
+			"value": "api",
+			"type": "string"
+		},
+		{
+			"key": "insertedId",
+			"value": "insertedId"
+		},
+		{
+			"key": "random_number",
+			"value": ""
+		},
+		{
+			"key": "limit",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "currentDate",
+			"value": ""
+		},
+		{
+			"key": "auth_token",
+			"value": ""
+		}
+	]
+}

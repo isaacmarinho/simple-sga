@@ -1,0 +1,110 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Core API",
+    "description": "Core microservice API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3015/core"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Lista todos os processos ambientais expirados ou em vias de expirar, dada uma janela de tempo.",
+        "parameters": [
+          {
+            "name": "expiration",
+            "in": "query",
+            "description": "Janela de tempo da expiração (DAY,WEEK,MONTH,YEAR - o default é YEAR)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Índice da página (iniciando por zero - o default é zero)",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Número de registros por página (o default é 5)",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro Interno do Servidor"
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "description": "Exibe informações sobre o microsserviço",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Process": {
+        "type": "object",
+        "properties": {
+          "$project": {
+            "type": "string",
+            "description": "Identificador do projeto a que pertence o processo."
+          },
+          "$code": {
+            "type": "string",
+            "description": "Código identificador do processo."
+          },
+          "$name": {
+            "type": "string",
+            "description": "Nome do processo."
+          },
+          "$status": {
+            "type": "string",
+            "description": "Etapa do processo (LP, LI, LO)."
+          },
+          "$valid_since": {
+            "type": "date",
+            "description": "Data de início de vigência do processo."
+          },
+          "$expiration": {
+            "type": "integer",
+            "description": "Número de anos até a expiração do processo."
+          },
+          "tags": {
+            "type": "array",
+            "description": "Etiquetas do processo."
+          },
+          "subscribers": {
+            "type": "array",
+            "description": "Observadores do processo."
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Anexos do processo."
+          }
+        }
+      }
+    }
+  }
+}

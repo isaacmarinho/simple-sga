@@ -2,12 +2,13 @@ import {Request, Response, Router} from "express";
 import dotenv from "dotenv";
 import fs from "fs";
 import * as console from "console";
-import {randomUUID} from "crypto";
 import {rimraf} from "rimraf";
+import {randomUUID} from "crypto";
 
 const getDirName = require('path').dirname;
 const WebHdfs = require("webhdfs");
 const uploadFile = require("../middleware/upload");
+const fileUtils = require("../utils/file-utils");
 
 dotenv.config();
 
@@ -26,6 +27,17 @@ const hdfs = WebHdfs.createClient({
 const attachmentRoute = Router();
 
 attachmentRoute.post("/add", async (req: Request, res: Response) => {
+    /// #swagger.description = 'Salva anexo de processo no sistema de arquivos distribuído'
+    /*  #swagger.path = '/file/add'
+        #swagger.requestBody = {
+              required: true,
+              content: {
+                  "multipart/form-data": {
+                        schema: { $ref: "#/definitions/AttachmentForm" }
+                      }
+                  }
+              }
+     */
     try {
         await uploadFile(req, res);
     } catch (err: any) {    // error handling
@@ -65,35 +77,16 @@ attachmentRoute.post("/add", async (req: Request, res: Response) => {
             res.send({msg: "Failed to save file."})
         }
     });
-    /*fs.writeFile(tempFile, file as Buffer, () => {
-        const localFileStream = fs.createReadStream(tempFile);
-        const remoteFileStream = hdfs.createWriteStream(`/environmental/${filename}`);
-        localFileStream.pipe(remoteFileStream);
-
-        let error: any = null;
-        remoteFileStream.on("error", (err: any) => {
-            console.log("Error");
-            error = err;
-            console.log(err);
-        });
-
-        remoteFileStream.on("finish", (value: any) => {
-            fs.stat(tempFile, (err, stats) => {
-                if (!err) {
-                    rimraf.native(tempFile);
-                }
-            });
-            console.log("Finish");
-            if (!error) {
-                res.send({msg: "File saved!", data: value});
-            } else {
-                res.send({msg: "Failed to save file."})
-            }
-        })
-    });*/
 })
 
 attachmentRoute.get("/get/:filename", async (req: Request, res: Response) => {
+    /// #swagger.description = 'Obtém um anexo salvo no sistema de arquivos distribuído.'
+    /*  #swagger.path = '/file/get/{filename}'
+        #swagger.parameters['filename'] = {
+            in: 'path',
+            type: 'string',
+            description: 'Nome do anexo.' }
+          */
     const filename: String = req.params.filename;
     const remoteFileStream = hdfs.createReadStream(`/environmental/${filename}`);
     const tempFile = `./temp/${randomUUID()}/${filename}`;

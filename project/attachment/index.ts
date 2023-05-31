@@ -1,8 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
+import * as swaggerUI from "swagger-ui-express";
 
 const aboutRouter = require("./routes/about");
 const attachmentRouter = require("./routes/attachment");
+const swaggerFile = require('./swagger_output.json')
 
 dotenv.config();
 
@@ -12,9 +14,10 @@ const app = express();
 app.use(express.json());
 app.use(express.static("client"));
 
-app.use("/attachment", attachmentRouter);
-app.use("/about", aboutRouter);
-
+const basePath = "/attachment";
+app.use(`${basePath}/file`, attachmentRouter);
+app.use(`${basePath}/about`, aboutRouter);
+app.use(`${basePath}/doc`, swaggerUI.serve, swaggerUI.setup(swaggerFile))
 
 app.listen(PORT, HOST_NAME, () => {
     console.log(`Attachment server running at ${HOST_NAME}:${PORT}`)

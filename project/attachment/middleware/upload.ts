@@ -1,5 +1,6 @@
 import * as util from "util";
 import multer from "multer";
+
 const maxSize = 2 * 1024 * 1024;
 
 let storage = multer.diskStorage({
@@ -15,7 +16,7 @@ let storage = multer.diskStorage({
 
 let uploadFile = multer({
     storage: storage,
-    limits: { fileSize: maxSize },
+    limits: {fileSize: maxSize},
 }).single("file");
 
 // create the exported middleware object
